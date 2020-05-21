@@ -2,6 +2,17 @@
 
 This is the competition repo. Team members are: 张涵，袁逸超，万道奇
 
+The whole process of our model building follows below procedure:
+* 1. We created **TrainDataExplore.ipynb** and **TestDataExplore.ipynb** to view the tables of training and testing data. 
+* 2. We created **Count_item_user.ipynb** to count the number of record exsiting for each user. According to our research, Most of the users in the dataset have 3 records for item viewing, which means that if we predict the next item one user will plan to view based on more than previous 2 items(starting from 3), those users who have only 3 records will have missing predicting features, meaning that our system cannot give predictions for these users. Therefore, we chose to predict the next item one user going to view base on the previous 2 items he has viewed before.Such an idea can be shown as the following formula：
+													user_vec vec + prev 2 item vec + prev 1 item vec --> next item vec
+* 3. Then we created **ProcessData.ipynb** for transforming the dataset into the form we described in step 2. The transformed dataset has 4 columns, which are user_id, the item one user viewed in previous 2 step, the item one user viewed in previous 1 step, and the actual item the user is viewing now.
+			
+			| User_id | Prev_2_item_id | Prev_1_item_id | Cur_item_id |
+			| :-----: | :------------: | :------------: | :---------: |
+			| number  |     number     |     number     |   number    |
+* 4. From the dataset we knew that for each column above, it can be mapped to a vector which represents the feature of each column, we map the 4 column to their vectores. The process was done in **MappingVec.ipynb**.
+
 ## 1. Background
 
 This track focuses on the [fariness of exposure](http://www.ec.tuwien.ac.at/~dimitris/research/recsys-fairness.html), i.e., how to recommend items that are rarely exposed in the past, to combat the Matthew effect frequently encountered in a recommender system. In particular, performing bias reduction when training on the click data is crucial for the success of this task. Just like there is a gap between the logged click data and the actual online environment in a modern recommender system, there will be a gap between the training data and the test data, mostly with respect to the trends and the items' popularity.
